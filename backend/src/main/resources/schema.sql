@@ -1,3 +1,5 @@
+SET time_zone = '+00:00';
+
 CREATE
 DATABASE IF NOT EXISTS bank_app;
 USE
@@ -13,7 +15,8 @@ CREATE TABLE customers
 (
     id    CHAR(36) PRIMARY KEY,
     name  VARCHAR(50)  NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
 );
 
 
@@ -34,15 +37,15 @@ CREATE TABLE transactions
     amount       DECIMAL(10, 2) NOT NULL,
     type         ENUM('DEPOSIT', 'WITHDRAW', 'TRANSFER') NOT NULL,
     reference_id CHAR(36)  DEFAULT NULL,
-    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at   TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
 
 
 
-INSERT INTO customers (id, name, email)
-VALUES ('112233', 'Alice', 'alice@example.com'),
-       ('444555', 'Bob', 'bob@example.com');
+INSERT INTO customers (id, name, email, password)
+VALUES ('112233', 'Alice', 'alice@example.com', '$2a$10$8XS4uoQQ510YdxAcUAXvcO4ZpZviJTIAlDMWGmnNXC/6E6qEZBYHW'),
+       ('444555', 'Bob', 'bob@example.com', '$2a$10$8XS4uoQQ510YdxAcUAXvcO4ZpZviJTIAlDMWGmnNXC/6E6qEZBYHW');
 
 
 INSERT INTO accounts (id, customer_id, account_number, balance)

@@ -1,48 +1,33 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+import { createContext, useContext } from "react";
+import useLocalStorage from "./useLocalStorage"; 
 
-export const AuthContext = React.createContext({});
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  const [authToken, setAuthToken] = useLocalStorage("authToken", null);
+  const [user, setUser] = useLocalStorage("user", null);
 
-    const [authToken, setAuthToken] = useLocalStorage("authToken", null);
-    const [userName, setUserName] = useLocalStorage("userName", null);
-    const [userAvatar, setuserAvatar] = useLocalStorage("userAvatar", null);
-    const [userId, setUserId] = useLocalStorage("userId", null);
-    const [darkMode, setDarkMode] =  useState(false);
-
-  const updateUser = (name, avatar) => {
-    setUserName(name);
-    setuserAvatar(avatar);
-  };
-
-  const login = (token, name, avatar, id) => {
-    setAuthToken(token);
-    setUserName(name);
-    setuserAvatar(avatar);
-    setUserId(id);
-  };
+const login = (token, userData) => {
+  setAuthToken(token);
+  setUser({
+    id: userData.userId,
+    name: userData.name,
+    email: userData.email,
+  });
+};
 
   const logout = () => {
     setAuthToken(null);
-    setUserName(null);
-    setuserAvatar(null);
-    setUserId(null);
-  };
-
-  const context = {
-    authToken,
-    userName,
-    userAvatar,
-    userId,
-    updateUser,
-    login,
-    logout,
-    darkMode,
-    setDarkMode
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ authToken, user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }

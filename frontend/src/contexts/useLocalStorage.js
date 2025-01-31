@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 
 /**
- * A custom hook wrapping a call to useState() to provide a stateful value, along with a call to useEffect() which saves that value
- * to local storage.
+ * Custom hook to persist state in localStorage
+ * @param {string} key - The localStorage key
+ * @param {any} initialValue - The initial state value
  */
-export function useLocalStorage(key, initialValue = null) {
-  const [value, setValue] = useState(() => {
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
     try {
-      const data = window.localStorage.getItem(key);
-      return data ? JSON.parse(data) : initialValue;
-    } catch {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error("Error reading localStorage", error);
       return initialValue;
     }
   });
 
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value, setValue]);
+    try {
+      window.localStorage.setItem(key, JSON.stringify(storedValue));
+    } catch (error) {
+      console.error("Error setting localStorage", error);
+    }
+  }, [key, storedValue]);
 
-  return [value, setValue];
+  return [storedValue, setStoredValue];
 }
+
+export default useLocalStorage;

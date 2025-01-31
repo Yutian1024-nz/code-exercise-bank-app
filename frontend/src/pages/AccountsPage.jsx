@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { getAccountsByCustomerId } from "../api/accounts";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 
 const AccountsPage = () => {
   const [accounts, setAccounts] = useState([]);
   const navigate = useNavigate();
-  const customerId = "112233"; // 先写死，后续可用登录信息替换
+  const { authToken, user, logout } = useAuth();
+  const customerId = user?.id;
 
   useEffect(() => {
+    if (!customerId || !authToken) return;
     const fetchAccounts = async () => {
-      const data = await getAccountsByCustomerId(customerId);
+      const data = await getAccountsByCustomerId(customerId, authToken);
       setAccounts(data);
     };
     fetchAccounts();
-  }, []);
+  }, [customerId, authToken]);
 
   return (
     <div className="p-6">

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,6 +58,7 @@ public class TransferService {
         withdrawTransaction.setAmount(amount.negate()); // negative amount displayed as withdraw
         withdrawTransaction.setType(TransactionType.TRANSFER);
         withdrawTransaction.setReferenceId(toAccountId);
+        withdrawTransaction.setCreatedAt(Instant.now());
 
 
         Transaction depositTransaction = new Transaction();
@@ -65,6 +67,7 @@ public class TransferService {
         depositTransaction.setAmount(amount);
         depositTransaction.setType(TransactionType.TRANSFER);
         depositTransaction.setReferenceId(fromAccountId);
+        depositTransaction.setCreatedAt(Instant.now());
 
         transactionRepository.save(withdrawTransaction);
         transactionRepository.save(depositTransaction);

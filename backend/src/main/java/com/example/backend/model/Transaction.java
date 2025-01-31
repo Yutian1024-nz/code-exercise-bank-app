@@ -3,7 +3,7 @@ package com.example.backend.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "transactions")
@@ -23,11 +23,19 @@ public class Transaction {
     @Column(name = "type", nullable = false)
     private TransactionType type;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant createdAt;
 
     @Column(name = "reference_id")
     private String referenceId;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = Instant.now(); 
+        }
+    }
 
     public String getReferenceId() {
         return referenceId;
@@ -53,7 +61,7 @@ public class Transaction {
         return type;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
@@ -74,7 +82,8 @@ public class Transaction {
         this.type = type;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 }

@@ -2,26 +2,29 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getTransactionsByAccountId } from "../api/transactions";
+import { useAuth } from "../contexts/AuthProvider";
 
 const TransactionsPage = () => {
   const { accountId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { accountNumber, balance = 0 } = location.state || {};
-
+  const { authToken, user, logout } = useAuth();
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
+    if (!accountId || !authToken) return;
     const fetchTransactions = async () => {
-      const data = await getTransactionsByAccountId(accountId);
+      const data = await getTransactionsByAccountId(accountId, authToken);
 
-      const sortedTransactions = data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setTransactions(sortedTransactions);
+      if (Array.isArray(data)) {
+        setTransactions(data); 
+      } else {
+        console.error("Data is not an array:", data);
+      }
     };
     fetchTransactions();
-  }, [accountId]);
+  }, [accountId, authToken]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString("en-NZ", {
@@ -31,7 +34,8 @@ const TransactionsPage = () => {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: false, 
+      hour12: false,
+      timeZone: "Pacific/Auckland", 
       timeZoneName: "short",
     });
   };

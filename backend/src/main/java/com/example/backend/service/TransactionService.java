@@ -11,16 +11,15 @@ import java.util.List;
 @Service
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-    private final AccountRepository accountRepository;
+
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
-        this.accountRepository = accountRepository;
     }
 
     public List<Transaction> getTransactionsByAccountId(String accountId) {
-        return transactionRepository.findByAccountId(accountId);
-    }
+        return transactionRepository.findByAccountIdOrderByCreatedAtDesc(accountId);
 
+    }
 }
