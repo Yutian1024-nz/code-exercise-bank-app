@@ -33,7 +33,7 @@ public class Transaction {
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {
-            createdAt = Instant.now(); 
+            createdAt = Instant.now();
         }
     }
 

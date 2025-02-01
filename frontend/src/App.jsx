@@ -19,27 +19,23 @@ function PrivateRoute({ element }) {
 
 function App() {
   return (
-
-      <Router>
-        <Routes>
-          <Route path="/" element={<PageLayout />}>
-            <Route
-              index
-              element={<PrivateRoute element={<AccountsPage />} />}
-            />
-            <Route
-              path="transactions/:accountId"
-              element={<PrivateRoute element={<TransactionsPage />} />}
-            />
-            <Route
-              path="transfer"
-              element={<PrivateRoute element={<TransferPage />} />}
-            />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Route>
-        </Routes>
-      </Router>
+    <Router>
+      <Routes>
+        <Route path="/" element={<PageLayout />}>
+          <Route index element={<PrivateRoute element={<AccountsPage />} />} />
+          <Route
+            path="transactions/:accountId"
+            element={<PrivateRoute element={<TransactionsPage />} />}
+          />
+          <Route
+            path="transfer"
+            element={<PrivateRoute element={<TransferPage />} />}
+          />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 

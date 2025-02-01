@@ -4,21 +4,19 @@ import { getAccountsByCustomerId } from "../api/accounts";
 import { useAuth } from "../contexts/AuthProvider";
 import { transferMoney } from "../api/transactions";
 
-
 const TransferPage = () => {
   const navigate = useNavigate();
   const [accounts, setAccounts] = useState([]);
   const [fromAccount, setFromAccount] = useState(null);
   const [toAccount, setToAccount] = useState(null);
   const [amount, setAmount] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
   const [resultMessage, setResultMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { authToken, user, logout } = useAuth();
   const customerId = user?.id;
-
 
   useEffect(() => {
     if (!customerId || !authToken) return;
@@ -39,41 +37,41 @@ const TransferPage = () => {
     fetchAccounts();
   }, []);
 
-
   const handleAmountChange = (e) => {
     let value = e.target.value;
-    value = value.replace(/[^0-9.]/g, ""); 
+    value = value.replace(/[^0-9.]/g, "");
     if (value.includes(".")) {
       const [intPart, decimalPart] = value.split(".");
       if (decimalPart.length > 2)
         value = `${intPart}.${decimalPart.slice(0, 2)}`;
     }
     setAmount(value);
-    setErrorMessage(""); 
+    setErrorMessage("");
   };
 
-const handleTransfer = async () => {
-  if (!fromAccount || !toAccount || !amount || parseFloat(amount) <= 0) return;
-  if (parseFloat(amount) > fromAccount.balance) return;
-  if (isLoading) return;
-  setIsLoading(true);
+  const handleTransfer = async () => {
+    if (!fromAccount || !toAccount || !amount || parseFloat(amount) <= 0)
+      return;
+    if (parseFloat(amount) > fromAccount.balance) return;
+    if (isLoading) return;
+    setIsLoading(true);
 
-  try {
-    const result = await transferMoney(
-      fromAccount.id,
-      toAccount.id,
-      parseFloat(amount).toFixed(2),
-      authToken
-    );
-    setResultMessage(result.message);
-  } catch (error) {
-    setResultMessage("Unexpected error. Please try again.");
-  } finally {
-    setIsLoading(false);
-    setIsResultOpen(true);
-    setIsConfirmOpen(false);
-  }
-};
+    try {
+      const result = await transferMoney(
+        fromAccount.id,
+        toAccount.id,
+        parseFloat(amount).toFixed(2),
+        authToken
+      );
+      setResultMessage(result.message);
+    } catch (error) {
+      setResultMessage("Unexpected error. Please try again.");
+    } finally {
+      setIsLoading(false);
+      setIsResultOpen(true);
+      setIsConfirmOpen(false);
+    }
+  };
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Transfer Money</h2>

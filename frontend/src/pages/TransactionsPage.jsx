@@ -18,7 +18,7 @@ const TransactionsPage = () => {
       const data = await getTransactionsByAccountId(accountId, authToken);
 
       if (Array.isArray(data)) {
-        setTransactions(data); 
+        setTransactions(data);
       } else {
         console.error("Data is not an array:", data);
       }
@@ -35,7 +35,7 @@ const TransactionsPage = () => {
       minute: "2-digit",
       second: "2-digit",
       hour12: false,
-      timeZone: "Pacific/Auckland", 
+      timeZone: "Pacific/Auckland",
       timeZoneName: "short",
     });
   };
