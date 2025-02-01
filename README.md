@@ -76,3 +76,40 @@ By default, the frontend runs at **[http://localhost:5173](http://localhost:5173
 | GET    | `/api/transactions?accountId={accountId}` | Get transactions for an account |
 | POST   | `/api/transfers`                          | Transfer money between accounts |
 
+---
+## 5. Demo Screenshots
+
+### Login Page
+The application includes a login page where users must authenticate before accessing their accounts.
+
+![Login Page](docs/login-page.png)
+
+### Account Overview
+After logging in, users can view all their bank accounts.
+
+![Account Overview](docs/account-overview.png)
+
+### Transaction History
+Users can select an account to view recent transactions.
+
+![Transaction History](docs/transaction-history.png)
+
+### Money Transfer
+Users can transfer money between their own accounts.
+
+![Money Transfer](docs/money-transfer.png)
+
+---
+
+## 6. Test Users
+
+For testing purposes, the database is pre-populated with the following user accounts:
+
+| Email             | Password | 
+| ----------------- | -------- | 
+| alice@example.com | 123456   |
+| bob@example.com   | 123456   | 
+
+You can log in using these credentials to test the application.
+- **Alice (`alice@example.com`) has two accounts**, allowing transfers between her own accounts.
+- **Bob (`bob@example.com`) has only one account**, so he cannot make transfers.
