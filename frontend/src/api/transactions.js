@@ -1,23 +1,16 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import { fetchWithAuth } from "./apiClient";
 
 export const getTransactionsByAccountId = async (accountId, authToken) => {
-  if (!accountId || !authToken) {
-    console.error("getTransactionsByAccountId: Missing accountId or authToken");
+  if (!accountId) {
+    console.error("getTransactionsByAccountId: Missing accountId");
     return [];
   }
+
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/transactions?accountId=${accountId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
+    return await fetchWithAuth(
+      `/api/transactions?accountId=${accountId}`,
+      authToken
     );
-    if (!response.ok) {
-      throw new Error("Failed to fetch transactions");
-    }
-    return await response.json();
   } catch (error) {
     console.error("Error fetching transactions:", error);
     return [];
@@ -30,31 +23,23 @@ export const transferMoney = async (
   amount,
   authToken
 ) => {
-  if (!fromAccountId || !toAccountId || !amount || !authToken) {
+  if (!fromAccountId || !toAccountId || !amount) {
     console.error("transferMoney: Missing required parameters");
     return { success: false, message: "Invalid transfer request" };
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/transfers`, {
+    const result = await fetchWithAuth(`/api/transfers`, authToken, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({ fromAccountId, toAccountId, amount }),
     });
 
-    if (response.ok) {
-      return { success: true, message: "Transfer Successful!" };
-    } else {
-      return {
-        success: false,
-        message: "Transfer failed. Please try again later.",
-      };
-    }
+    return { success: true, message: "Transfer Successful!" };
   } catch (error) {
-    console.error("Error during transfer:", error);
-    return { success: false, message: "Network error. Please try again." };
+    console.error("Error transferring money:", error);
+    return { success: false, message: "Unexpected error. Please try again." };
   }
 };

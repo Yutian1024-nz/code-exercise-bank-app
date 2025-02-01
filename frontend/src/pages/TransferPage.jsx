@@ -55,7 +55,7 @@ const TransferPage = () => {
 const handleTransfer = async () => {
   if (!fromAccount || !toAccount || !amount || parseFloat(amount) <= 0) return;
   if (parseFloat(amount) > fromAccount.balance) return;
-
+  if (isLoading) return;
   setIsLoading(true);
 
   try {
@@ -76,13 +76,6 @@ const handleTransfer = async () => {
 };
   return (
     <div className="p-6">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-4 py-2 bg-[#3B755F] text-white rounded hover:bg-[#A8E6CF] transition"
-      >
-        ← Back to Accounts
-      </button>
-
       <h2 className="text-2xl font-bold mb-4">Transfer Money</h2>
 
       {/* From Account */}
@@ -193,10 +186,11 @@ const handleTransfer = async () => {
 
             <div className="flex justify-center space-x-6">
               <button
+                disabled={isLoading}
                 onClick={handleTransfer}
                 className="min-w-[120px] px-4 py-2 bg-[#3B755F] text-white rounded hover:bg-[#A8E6CF]"
               >
-                Confirm
+                {isLoading ? "Processing..." : "Confirm"}
               </button>
               <button
                 onClick={() => setIsConfirmOpen(false)}

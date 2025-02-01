@@ -63,7 +63,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-6">
           {authToken ? (
             <>
-              <span className="text-[#D4ECDD] text-sm">
+              <span className="text-white text-sm">
                 Hi, {user?.name || "Guest"}
               </span>
               <button

@@ -13,18 +13,18 @@ DROP TABLE IF EXISTS customers;
 
 CREATE TABLE customers
 (
-    id    CHAR(36) PRIMARY KEY,
-    name  VARCHAR(50)  NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    id    VARCHAR(255) PRIMARY KEY,
+    name  VARCHAR(255)  NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
 
 
 CREATE TABLE accounts
 (
-    id             CHAR(36) PRIMARY KEY,
-    customer_id    CHAR(36)       NOT NULL,
-    account_number VARCHAR(20)    NOT NULL UNIQUE,
+    id             VARCHAR(255) PRIMARY KEY,
+    customer_id    VARCHAR(255)       NOT NULL,
+    account_number VARCHAR(255)    NOT NULL UNIQUE,
     balance        DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE
 );
@@ -32,11 +32,11 @@ CREATE TABLE accounts
 
 CREATE TABLE transactions
 (
-    id           CHAR(36) PRIMARY KEY,
-    account_id   CHAR(36)       NOT NULL,
+    id           VARCHAR(255) PRIMARY KEY,
+    account_id   VARCHAR(255)       NOT NULL,
     amount       DECIMAL(10, 2) NOT NULL,
     type         ENUM('DEPOSIT', 'WITHDRAW', 'TRANSFER') NOT NULL,
-    reference_id CHAR(36)  DEFAULT NULL,
+    reference_id VARCHAR(255)  DEFAULT NULL,
     created_at   TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
