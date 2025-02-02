@@ -50,12 +50,13 @@ VALUES ('112233', 'Alice', 'alice@example.com', '$2a$10$8XS4uoQQ510YdxAcUAXvcO4Z
 
 
 INSERT INTO accounts (id, customer_id, account_number, balance)
-VALUES (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Alice'), '99887766', 5000.00),
-       (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Alice'), '00998877', 3000.00),
-       (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Bob'), '555666777', 7000.00);
+VALUES (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Alice'), '99887766', 6000.00),
+       (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Alice'), '00998877', 0.00),
+       (REPLACE(UUID(), '-', ''), (SELECT id FROM customers WHERE name = 'Bob'), '555666777', 1000.00);
 
 
 INSERT INTO transactions (id, account_id, amount, type)
-VALUES (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '99887766'), 500.00, 'deposit'),
-       (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '99887766'), 200.00, 'withdraw'),
+VALUES (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '99887766'), 500.00, 'withdraw'),
+       (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '99887766'), 1500.00, 'deposit'),
+       (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '99887766'), 5000.00, 'deposit'),
        (REPLACE(UUID(), '-', ''), (SELECT id FROM accounts WHERE account_number = '555666777'), 1000.00, 'deposit');
