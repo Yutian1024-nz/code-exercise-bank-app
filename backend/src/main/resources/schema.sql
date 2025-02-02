@@ -1,9 +1,9 @@
 SET time_zone = '+00:00';
 
 CREATE
-DATABASE IF NOT EXISTS bank_app;
+    DATABASE IF NOT EXISTS bank_app;
 USE
-bank_app;
+    bank_app;
 
 
 DROP TABLE IF EXISTS transactions;
@@ -13,9 +13,9 @@ DROP TABLE IF EXISTS customers;
 
 CREATE TABLE customers
 (
-    id    VARCHAR(255) PRIMARY KEY,
-    name  VARCHAR(255)  NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    id       VARCHAR(255) PRIMARY KEY,
+    name     VARCHAR(255) NOT NULL,
+    email    VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
 
@@ -23,9 +23,10 @@ CREATE TABLE customers
 CREATE TABLE accounts
 (
     id             VARCHAR(255) PRIMARY KEY,
-    customer_id    VARCHAR(255)       NOT NULL,
-    account_number VARCHAR(255)    NOT NULL UNIQUE,
+    customer_id    VARCHAR(255)   NOT NULL,
+    account_number VARCHAR(255)   NOT NULL UNIQUE,
     balance        DECIMAL(10, 2) NOT NULL,
+    version        INT DEFAULT 0,
     FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE
 );
 
@@ -33,11 +34,11 @@ CREATE TABLE accounts
 CREATE TABLE transactions
 (
     id           VARCHAR(255) PRIMARY KEY,
-    account_id   VARCHAR(255)       NOT NULL,
-    amount       DECIMAL(10, 2) NOT NULL,
-    type         ENUM('DEPOSIT', 'WITHDRAW', 'TRANSFER') NOT NULL,
-    reference_id VARCHAR(255)  DEFAULT NULL,
-    created_at   TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    account_id   VARCHAR(255)                             NOT NULL,
+    amount       DECIMAL(10, 2)                           NOT NULL,
+    type         ENUM ('DEPOSIT', 'WITHDRAW', 'TRANSFER') NOT NULL,
+    reference_id VARCHAR(255) DEFAULT NULL,
+    created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP   NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
 

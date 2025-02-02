@@ -22,6 +22,8 @@ public class Account {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal balance;
 
+    @Version
+    private Integer version;
 
     public String getCustomerId() {
         return customerId;
